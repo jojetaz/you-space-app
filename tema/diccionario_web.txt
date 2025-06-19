@@ -1,0 +1,176 @@
+DICCIONARIO DE CONCEPTOS WEB PARA TU PROYECTO
+============================================
+
+1. Footer
+----------
+Definición: Pie de página de la web, normalmente contiene créditos, derechos de autor, enlaces, etc.
+Ejemplo:
+<footer>
+    <p>© 2024 Mi Sitio Web</p>
+</footer>
+
+2. Modal
+--------
+Definición: Ventana emergente que aparece sobre el contenido principal para mostrar formularios, mensajes, etc.
+Ejemplo (Bootstrap):
+<button data-bs-toggle="modal" data-bs-target="#miModal">Abrir Modal</button>
+<div class="modal fade" id="miModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Título</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">Contenido del modal</div>
+    </div>
+  </div>
+</div>
+
+3. z-index
+----------
+Definición: Propiedad CSS que controla qué elemento se muestra encima de otro.
+Ejemplo:
+<div style="position: relative; z-index: 10;">Encima</div>
+<div style="position: relative; z-index: 1;">Debajo</div>
+
+4. position
+-----------
+Definición: Propiedad CSS que define cómo se posiciona un elemento.
+Valores comunes:
+- static: posición normal (por defecto)
+- relative: relativo a su posición normal
+- absolute: respecto al padre posicionado
+- fixed: fijo en la pantalla
+- sticky: se queda fijo al hacer scroll
+Ejemplo:
+<div style="position: fixed; bottom: 0;">Siempre visible abajo</div>
+
+5. main
+-------
+Definición: Etiqueta HTML que contiene el contenido principal de la página.
+Ejemplo:
+<main>
+  <h1>Bienvenido</h1>
+  <p>Contenido principal aquí.</p>
+</main>
+
+6. backdrop
+-----------
+Definición: Fondo semitransparente detrás de un modal.
+Ejemplo (Bootstrap lo genera automáticamente):
+<div class="modal-backdrop fade show"></div>
+
+7. container
+------------
+Definición: Clase de Bootstrap que centra y da márgenes al contenido.
+Ejemplo:
+<div class="container">
+  <p>Contenido centrado y con márgenes.</p>
+</div>
+
+8. navbar
+---------
+Definición: Barra de navegación superior de la web.
+Ejemplo (Bootstrap):
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">Mi Sitio</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+9. card
+-------
+Definición: Tarjeta visual para mostrar información agrupada.
+Ejemplo (Bootstrap):
+<div class="card" style="width: 18rem;">
+  <img src="imagen.jpg" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">Título</h5>
+    <p class="card-text">Texto de la tarjeta.</p>
+  </div>
+</div>
+
+10. alert
+---------
+Definición: Mensaje destacado para avisos, errores, etc.
+Ejemplo (Bootstrap):
+<div class="alert alert-success" role="alert">
+  ¡Operación exitosa!
+</div>
+
+11. button (btn)
+----------------
+Definición: Botón interactivo.
+Ejemplo (Bootstrap):
+<button class="btn btn-primary">Guardar</button>
+
+12. form
+--------
+Definición: Formulario para enviar datos.
+Ejemplo:
+<form action="/enviar" method="POST">
+  <input type="text" name="nombre">
+  <button type="submit">Enviar</button>
+</form>
+
+13. input
+---------
+Definición: Campo de entrada de datos en un formulario.
+Ejemplo:
+<input type="email" name="correo" required>
+
+14. label
+---------
+Definición: Etiqueta descriptiva para un campo de formulario.
+Ejemplo:
+<label for="nombre">Nombre:</label>
+<input id="nombre" name="nombre">
+
+15. icon
+--------
+Definición: Icono visual, normalmente usando una librería como Bootstrap Icons.
+Ejemplo:
+<i class="bi bi-house"></i>
+
+16. responsive
+--------------
+Definición: Diseño que se adapta a diferentes tamaños de pantalla.
+Ejemplo (Bootstrap):
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-md-6">Columna adaptable</div>
+  </div>
+</div>
+
+17. backdrop-filter
+------------------
+Definición: Efecto visual de desenfoque o brillo sobre el fondo de un elemento.
+Ejemplo:
+<div style="backdrop-filter: blur(10px);">Contenido con fondo difuminado</div>
+
+18. text-shadow
+---------------
+Definición: Sombra aplicada al texto para mejorar la legibilidad.
+Ejemplo:
+<h1 style="text-shadow: 0 2px 8px #00ffff;">Título con sombra</h1>
+
+19. overflow
+------------
+Definición: Controla cómo se muestra el contenido que se sale del área de un elemento.
+Ejemplo:
+<div style="overflow: auto; max-height: 200px;">Contenido desplazable</div>
+
+20. static_folder
+-----------------
+Definición: Carpeta donde Flask busca los archivos estáticos (imágenes, CSS, JS).
+Ejemplo en Flask:
+app = Flask(__name__, static_folder='tema/assets')
+
+---
+
+Este diccionario cubre los conceptos más usados en tu proyecto. Puedes abrir y guardar este archivo para futuras consultas. 
