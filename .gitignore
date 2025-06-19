@@ -1,10 +1,10 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
+
+# C distribution / packaging
 .Python
-env/
 build/
 develop-eggs/
 dist/
@@ -20,28 +20,102 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# Virtual Environment
-venv/
-ENV/
+# PyInstaller
+*.manifest
+*.spec
 
-# Flask
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+
+# Flask stuff:
 instance/
 .webassets-cache
 
-# SQLite
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Database
 *.db
+*.sqlite
 *.sqlite3
 
-# VS Code
+# IDE
 .vscode/
+.idea/
+*.swp
+*.swo
 
-# Environment variables
-.env
-
-# Logs
-*.log
-
-# System Files
+# OS
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Application specific
+uploads/
+static/uploads/
+*.log 

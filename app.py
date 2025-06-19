@@ -4,17 +4,14 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import os
-from tema.assets.default_images import CATEGORIA_IMAGES, HERRAMIENTA_IMAGES
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__, 
-    template_folder='tema/templates',
-    static_folder='tema/assets'
-)
-app.config['SECRET_KEY'] = 'tu_clave_secreta_aqui'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ia_tools.db'
+# Configuración de la aplicación Flask
+app = Flask(__name__)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'tu_clave_secreta_aqui')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///ia_tools.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['UPLOAD_FOLDER'] = 'tema/assets/uploads'
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 # Asegurar que exista el directorio de uploads
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -23,6 +20,25 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+# Imágenes predeterminadas (definidas localmente para evitar problemas de importación)
+CATEGORIA_IMAGES = {
+    'Generación de Video': 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&auto=format&fit=crop',
+    'Generación de Música': 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop',
+    'Generación de Imágenes': 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&auto=format&fit=crop',
+    'Generación de Texto': 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&auto=format&fit=crop',
+    'Generación de Código': 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop',
+    'default': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop'
+}
+
+HERRAMIENTA_IMAGES = {
+    'ChatGPT': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop',
+    'DALL-E': 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&auto=format&fit=crop',
+    'Midjourney': 'https://images.unsplash.com/photo-1682687220063-4742bd7fd538?w=800&auto=format&fit=crop',
+    'Stable Diffusion': 'https://images.unsplash.com/photo-1682687220063-4742bd7fd538?w=800&auto=format&fit=crop',
+    'GitHub Copilot': 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop',
+    'default': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop'
+}
 
 # Funciones de ayuda para las imágenes
 def get_categoria_imagen(nombre):

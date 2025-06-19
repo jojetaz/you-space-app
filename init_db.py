@@ -1,43 +1,88 @@
-from app import app, db, Usuario, Categoria
+#!/usr/bin/env python3
+"""
+Script para inicializar la base de datos en Render
+"""
+
+import os
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
 
+# Crear aplicación Flask
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///ia_tools.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+# Definir modelos
+class Usuario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+    nombre = db.Column(db.String(100), nullable=False)
+    es_admin = db.Column(db.Boolean, default=False)
+
+class Categoria(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    descripcion = db.Column(db.Text)
+    imagen = db.Column(db.String(200), nullable=True)
+    herramientas = db.relationship('Herramienta', backref='categoria', lazy=True)
+
+class Herramienta(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    descripcion = db.Column(db.Text)
+    url = db.Column(db.String(200))
+    imagen = db.Column(db.String(200))
+    video = db.Column(db.String(200))
+    categoria_id = db.Column(db.Integer, db.ForeignKey('categoria.id'), nullable=False)
+    fecha_creacion = db.Column(db.DateTime, default=db.func.current_timestamp())
+
 def init_db():
+    """Inicializar la base de datos"""
     with app.app_context():
         # Crear todas las tablas
         db.create_all()
-
-        # Crear usuario administrador solo si no existe
-        admin_email = 'admin@example.com'
-        admin = Usuario.query.filter_by(email=admin_email).first()
-        if not admin:
-            admin = Usuario(
-                email=admin_email,
-                password=generate_password_hash('admin123'),
-                nombre='Administrador',
-                es_admin=True
-            )
-            db.session.add(admin)
-
-        # Crear categorías predefinidas solo si no existen
-        categorias = [
-            {'nombre': 'Generación de Video', 'descripcion': 'Herramientas para crear y editar videos usando IA'},
-            {'nombre': 'Generación de Música', 'descripcion': 'Herramientas para crear y modificar música con IA'},
-            {'nombre': 'Generación de Imágenes', 'descripcion': 'Herramientas para crear y editar imágenes usando IA'},
-            {'nombre': 'Presentaciones', 'descripcion': 'Herramientas para crear presentaciones con IA'},
-            {'nombre': 'Edición de Video', 'descripcion': 'Herramientas de IA para editar y mejorar videos'},
-            {'nombre': 'Conversión de Formatos', 'descripcion': 'Herramientas para convertir entre diferentes formatos usando IA'},
-            {'nombre': 'Automatización de Trabajos', 'descripcion': 'Herramientas para automatizar tareas con IA'},
-            {'nombre': 'Desarrollo Web', 'descripcion': 'Herramientas de IA para desarrollo web'},
-            {'nombre': 'Aplicaciones Móviles', 'descripcion': 'Herramientas de IA para desarrollo de apps móviles'}
+        print("✅ Tablas creadas exitosamente")
+        
+        # Verificar si ya hay datos
+        if Usuario.query.count() > 0:
+            print("✅ La base de datos ya tiene datos")
+            return
+        
+        # Crear usuario administrador
+        admin = Usuario(
+            email='admin@example.com',
+            password=generate_password_hash('admin123'),
+            nombre='Administrador',
+            es_admin=True
+        )
+        db.session.add(admin)
+        
+        # Crear categorías de ejemplo
+        categorias_ejemplo = [
+            {
+                'nombre': 'Chatbots',
+                'descripcion': 'Herramientas para crear y gestionar chatbots inteligentes'
+            },
+            {
+                'nombre': 'Generación de Imágenes',
+                'descripcion': 'IA para crear y editar imágenes de alta calidad'
+            },
+            {
+                'nombre': 'Análisis de Texto',
+                'descripcion': 'Herramientas para procesamiento y análisis de texto'
+            }
         ]
-        for cat in categorias:
-            existe = Categoria.query.filter_by(nombre=cat['nombre']).first()
-            if not existe:
-                db.session.add(Categoria(**cat))
-
-        # Guardar cambios
+        
+        for cat_data in categorias_ejemplo:
+            categoria = Categoria(**cat_data)
+            db.session.add(categoria)
+        
         db.session.commit()
+        print("✅ Datos iniciales agregados exitosamente")
 
-if __name__ == '__main__':
-    init_db()
-    print("Base de datos inicializada con éxito!") 
+if __name__ == "__main__":
+    init_db() 

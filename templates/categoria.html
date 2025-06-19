@@ -2,121 +2,177 @@
 
 {% block content %}
 <div class="container py-5">
-    <div class="row mb-5">
-        <div class="col-12 text-center">
-            <h1 class="display-4 mb-3">{{ categoria.nombre }}</h1>
-            <p class="lead">{{ categoria.descripcion }}</p>
-        </div>
+    <div class="text-center mb-5">
+        <h1 class="display-4">{{ categoria.nombre }}</h1>
+        <p class="lead">{{ categoria.descripcion }}</p>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-        {% for herramienta in categoria.herramientas %}
-        <div class="col">
-            <div class="card h-100">
-                {% if herramienta.imagen %}
-                <img src="{{ url_for('static', filename='uploads/' + herramienta.imagen) }}" 
-                     class="card-img-top" alt="{{ herramienta.nombre }}">
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ herramienta.nombre }}</h5>
-                    <p class="card-text">{{ herramienta.descripcion }}</p>
-                    <div class="d-flex gap-2 mt-4">
+    <!-- Tabla de herramientas -->
+    <div class="table-responsive mb-4">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>URL</th>
+                    <th>Video</th>
+                    <th>Fecha de Creación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for herramienta in categoria.herramientas %}
+                <tr>
+                    <td>{{ herramienta.nombre }}</td>
+                    <td>{{ herramienta.descripcion }}</td>
+                    <td>
                         {% if herramienta.url %}
-                        <a href="{{ herramienta.url }}" class="btn btn-primary flex-grow-1" target="_blank">
-                            <i class="bi bi-box-arrow-up-right"></i> Visitar herramienta
+                        <a href="{{ herramienta.url }}" target="_blank" class="btn btn-sm btn-primary">
+                            <i class="bi bi-box-arrow-up-right"></i> Visitar
                         </a>
                         {% endif %}
+                    </td>
+                    <td>
                         {% if herramienta.video %}
-                        <button class="btn btn-secondary flex-grow-1" data-bs-toggle="modal" 
-                                data-bs-target="#videoModal{{ herramienta.id }}">
-                            <i class="bi bi-play-circle"></i> Ver video
-                        </button>
+                        <a href="{{ herramienta.video }}" target="_blank" class="btn btn-sm btn-secondary">
+                            <i class="bi bi-play-circle"></i> Ver Video
+                        </a>
                         {% endif %}
-                    </div>
-                </div>
-                <div class="card-footer bg-transparent border-0 text-muted">
-                    <small>
-                        <i class="bi bi-clock"></i> Agregado el {{ herramienta.fecha_creacion.strftime('%d/%m/%Y') }}
-                    </small>
-                </div>
-            </div>
-        </div>
-
-        {% if herramienta.video %}
-        <div class="modal fade" id="videoModal{{ herramienta.id }}" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="bi bi-play-circle"></i> {{ herramienta.nombre }}
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <video class="w-100 rounded" controls>
-                            <source src="{{ url_for('static', filename='uploads/' + herramienta.video) }}" type="video/mp4">
-                            Tu navegador no soporta el elemento de video.
-                        </video>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-        {% endfor %}
+                    </td>
+                    <td>{{ herramienta.fecha_creacion.strftime('%d/%m/%Y') }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-info me-2" onclick="editarHerramienta({{ herramienta.id }}, '{{ herramienta.nombre }}', '{{ herramienta.descripcion }}', '{{ herramienta.url }}', '{{ herramienta.video }}')">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="eliminarHerramienta({{ herramienta.id }})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
-    {% if current_user.is_authenticated and current_user.es_admin %}
-    <div class="row mt-5">
-        <div class="col-12 text-center">
-            <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#nuevaHerramientaModal">
-                <i class="bi bi-plus-circle"></i> Nueva Herramienta
-            </button>
-        </div>
+    <div class="text-center mt-4">
+        <button type="button" class="btn btn-success" onclick="mostrarFormulario()">
+            <i class="bi bi-plus-circle"></i> Agregar Herramienta
+        </button>
     </div>
-    {% endif %}
 </div>
 
-<!-- Modal Nueva Herramienta -->
-<div class="modal fade" id="nuevaHerramientaModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="bi bi-plus-circle"></i> Nueva Herramienta
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+<!-- Formulario flotante para nueva herramienta -->
+<div id="formularioHerramienta" class="formulario-flotante" style="display: none;">
+    <div class="formulario-contenido">
+        <div class="formulario-header">
+            <h5 id="formularioTitulo">Nueva Herramienta</h5>
+            <button type="button" class="btn-close" onclick="ocultarFormulario()"></button>
+        </div>
+        <form id="formHerramienta" action="{{ url_for('agregar_herramienta', categoria_id=categoria.id) }}" method="POST" enctype="multipart/form-data">
+            <input type="hidden" id="herramienta_id" name="herramienta_id" value="">
+            <div class="formulario-body">
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre de la herramienta</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" 
+                           placeholder="Ej: Visual Studio Code" required>
+                </div>
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label">Descripción</label>
+                    <textarea class="form-control" id="descripcion" name="descripcion" rows="3" 
+                              placeholder="Describe brevemente la herramienta y sus principales características" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="url" class="form-label">URL de la herramienta</label>
+                    <input type="url" class="form-control" id="url" name="url" 
+                           placeholder="https://ejemplo.com/herramienta" required>
+                </div>
+                <div class="mb-3">
+                    <label for="video" class="form-label">URL del Video (opcional)</label>
+                    <input type="url" class="form-control" id="video" name="video" 
+                           placeholder="https://ejemplo.com/video-tutorial">
+                </div>
+                <div class="mb-3">
+                    <label for="imagen" class="form-label">Imagen de la herramienta</label>
+                    <input type="file" class="form-control" id="imagen" name="imagen" 
+                           accept="image/*" title="Selecciona una imagen para la herramienta">
+                </div>
             </div>
-            <form action="{{ url_for('agregar_herramienta', categoria_id=categoria.id) }}" method="POST" enctype="multipart/form-data">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre de la herramienta</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="descripcion" class="form-label">Descripción</label>
-                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="url" class="form-label">URL de la herramienta</label>
-                        <input type="url" class="form-control" id="url" name="url">
-                    </div>
-                    <div class="mb-3">
-                        <label for="imagen" class="form-label">Imagen</label>
-                        <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
-                    </div>
-                    <div class="mb-3">
-                        <label for="video" class="form-label">Video</label>
-                        <input type="file" class="form-control" id="video" name="video" accept="video/*">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success">
-                        <i class="bi bi-save"></i> Guardar Herramienta
-                    </button>
-                </div>
-            </form>
+            <div class="formulario-footer">
+                <button type="button" class="btn btn-secondary" onclick="ocultarFormulario()">Cancelar</button>
+                <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Contenedor para video -->
+<div id="videoContainer" class="video-container" style="display: none;">
+    <div class="video-contenido">
+        <div class="video-header">
+            <h5 id="videoTitulo"></h5>
+            <button type="button" class="btn-close" onclick="ocultarVideo()"></button>
+        </div>
+        <div class="video-body">
+            <div class="ratio ratio-16x9">
+                <iframe id="videoFrame" src="" allowfullscreen></iframe>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+function mostrarFormulario() {
+    document.getElementById('formularioTitulo').textContent = 'Nueva Herramienta';
+    document.getElementById('herramienta_id').value = '';
+    document.getElementById('formHerramienta').reset();
+    document.getElementById('formularioHerramienta').style.display = 'block';
+    document.getElementById('nombre').focus();
+}
+
+function editarHerramienta(id, nombre, descripcion, url, video) {
+    document.getElementById('formularioTitulo').textContent = 'Editar Herramienta';
+    document.getElementById('herramienta_id').value = id;
+    document.getElementById('nombre').value = nombre;
+    document.getElementById('descripcion').value = descripcion;
+    document.getElementById('url').value = url;
+    document.getElementById('video').value = video;
+    document.getElementById('formularioHerramienta').style.display = 'block';
+    document.getElementById('nombre').focus();
+}
+
+function ocultarFormulario() {
+    document.getElementById('formularioHerramienta').style.display = 'none';
+    document.getElementById('formHerramienta').reset();
+}
+
+function eliminarHerramienta(id) {
+    if (confirm('¿Estás seguro de que deseas eliminar esta herramienta?')) {
+        fetch(`/eliminar_herramienta/${id}`, {
+            method: 'POST',
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            }
+        });
+    }
+}
+
+function mostrarVideo(url, titulo) {
+    document.getElementById('videoTitulo').textContent = titulo;
+    document.getElementById('videoFrame').src = url;
+    document.getElementById('videoContainer').style.display = 'flex';
+}
+
+function ocultarVideo() {
+    document.getElementById('videoContainer').style.display = 'none';
+    document.getElementById('videoFrame').src = '';
+}
+
+// Cerrar formulario al hacer clic fuera
+document.getElementById('formularioHerramienta').addEventListener('click', function(event) {
+    if (event.target === this) {
+        ocultarFormulario();
+    }
+});
+</script>
 {% endblock %} 

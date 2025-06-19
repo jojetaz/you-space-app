@@ -1,59 +1,126 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row mb-5">
-    <div class="col-12 text-center">
-        <h1 class="display-4 mb-3">Categorías de Herramientas IA</h1>
-        <p class="lead text-white">Explora nuestra colección de herramientas de Inteligencia Artificial organizadas por categorías</p>
-    </div>
-</div>
-
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    {% for categoria in categorias %}
-    <div class="col">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <div class="mb-4">
-                    {% if categoria.nombre == 'Generación de Video' %}
-                        <i class="bi bi-camera-video display-4 text-primary"></i>
-                    {% elif categoria.nombre == 'Generación de Música' %}
-                        <i class="bi bi-music-note-beamed display-4 text-primary"></i>
-                    {% elif categoria.nombre == 'Generación de Imágenes' %}
-                        <i class="bi bi-image display-4 text-primary"></i>
-                    {% elif categoria.nombre == 'Presentaciones' %}
-                        <i class="bi bi-file-earmark-slides display-4 text-primary"></i>
-                    {% elif categoria.nombre == 'Edición de Video' %}
-                        <i class="bi bi-film display-4 text-primary"></i>
-                    {% elif categoria.nombre == 'Conversión de Formatos' %}
-                        <i class="bi bi-arrow-repeat display-4 text-primary"></i>
-                    {% elif categoria.nombre == 'Automatización de Trabajos' %}
-                        <i class="bi bi-robot display-4 text-primary"></i>
-                    {% elif categoria.nombre == 'Desarrollo Web' %}
-                        <i class="bi bi-globe display-4 text-primary"></i>
-                    {% elif categoria.nombre == 'Aplicaciones Móviles' %}
-                        <i class="bi bi-phone display-4 text-primary"></i>
-                    {% else %}
-                        <i class="bi bi-tools display-4 text-primary"></i>
-                    {% endif %}
-                </div>
-                <h5 class="card-title">{{ categoria.nombre }}</h5>
-                <p class="card-text">{{ categoria.descripcion }}</p>
-                <a href="{{ url_for('categoria', id=categoria.id) }}" class="btn btn-primary mt-3">
-                    <i class="bi bi-arrow-right-circle"></i> Ver herramientas
-                </a>
-            </div>
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-4">Herramientas de IA</h1>
+            <p class="lead">Explora nuestra colección de herramientas de Inteligencia Artificial.</p>
+            <button class="btn btn-primary" onclick="mostrarFormularioCategoria()">
+                <i class="bi bi-plus-circle"></i> Agregar Nueva Categoría
+            </button>
         </div>
     </div>
-    {% endfor %}
-</div>
 
-{% if current_user.is_authenticated and current_user.es_admin %}
-<div class="row mt-5">
-    <div class="col-12 text-center">
-        <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#nuevaCategoriaModal">
-            <i class="bi bi-plus-circle"></i> Nueva Categoría
-        </button>
+    <div class="row">
+        {% for categoria in categorias %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-img-container" style="height: 200px; overflow: hidden; background-color: #f8f9fa;">
+                    {% if categoria.imagen %}
+                    <img src="{{ url_for('static', filename='uploads/' + categoria.imagen) }}" 
+                         class="card-img-top" 
+                         alt="{{ categoria.nombre }}"
+                         style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                    <div class="d-flex align-items-center justify-content-center h-100">
+                        <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ categoria.nombre }}</h5>
+                    <p class="card-text">{{ categoria.descripcion }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <a href="{{ url_for('categoria', id=categoria.id) }}" class="btn btn-primary">
+                            <i class="bi bi-tools"></i> Ver Herramientas
+                        </a>
+                        <div class="btn-group">
+                            <button class="btn btn-warning" onclick="editarCategoria({{ categoria.id }}, '{{ categoria.nombre }}', '{{ categoria.descripcion }}')" title="Editar categoría">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-danger" onclick="confirmarEliminarCategoria({{ categoria.id }})" title="Eliminar categoría">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
-{% endif %}
+
+<!-- Formulario flotante para categorías -->
+<div class="formulario-flotante" id="formularioCategoria" style="display: none;">
+    <div class="formulario-contenido">
+        <div class="formulario-header">
+            <h3 id="tituloFormularioCategoria">Nueva Categoría</h3>
+            <button type="button" class="btn-close" onclick="ocultarFormularioCategoria()"></button>
+        </div>
+        <form action="{{ url_for('agregar_categoria') }}" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="categoria_id" id="categoriaId">
+            <div class="formulario-body">
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre de la categoría</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                </div>
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label">Descripción</label>
+                    <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="imagen" class="form-label">Imagen de la categoría</label>
+                    <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+                    <small class="form-text text-muted">Formatos aceptados: JPG, PNG, GIF. Tamaño máximo: 5MB</small>
+                </div>
+            </div>
+            <div class="formulario-footer">
+                <button type="button" class="btn btn-secondary" onclick="ocultarFormularioCategoria()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function mostrarFormularioCategoria() {
+    document.getElementById('formularioCategoria').style.display = 'flex';
+    document.getElementById('tituloFormularioCategoria').textContent = 'Nueva Categoría';
+    document.getElementById('categoriaId').value = '';
+    document.getElementById('nombre').value = '';
+    document.getElementById('descripcion').value = '';
+    document.getElementById('imagen').value = '';
+}
+
+function editarCategoria(id, nombre, descripcion) {
+    document.getElementById('formularioCategoria').style.display = 'flex';
+    document.getElementById('tituloFormularioCategoria').textContent = 'Editar Categoría';
+    document.getElementById('categoriaId').value = id;
+    document.getElementById('nombre').value = nombre;
+    document.getElementById('descripcion').value = descripcion;
+}
+
+function ocultarFormularioCategoria() {
+    document.getElementById('formularioCategoria').style.display = 'none';
+}
+
+function confirmarEliminarCategoria(id) {
+    if (confirm('¿Estás seguro de que deseas eliminar esta categoría? Esta acción eliminará todas las herramientas asociadas.')) {
+        // Crear un formulario temporal para enviar la solicitud POST
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = "{{ url_for('eliminar_categoria', categoria_id=0) }}".replace('0', id);
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+// Cerrar el formulario al hacer clic fuera de él
+document.getElementById('formularioCategoria').addEventListener('click', function(e) {
+    if (e.target === this) {
+        ocultarFormularioCategoria();
+    }
+});
+</script>
 {% endblock %} 
