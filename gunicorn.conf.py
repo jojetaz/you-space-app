@@ -7,15 +7,19 @@ Optimizado para trabajar con Cloudflare y dominio you-space.info
 import multiprocessing
 import os
 
+# Configuración de Gunicorn para Render
+bind = "0.0.0.0:10000"
+workers = 2
+timeout = 120
+keepalive = 2
+max_requests = 1000
+max_requests_jitter = 100
+
 # Configuración del servidor
 bind = "0.0.0.0:8000"
 workers = multiprocessing.cpu_count() * 2 + 1
 worker_class = "sync"
 worker_connections = 1000
-max_requests = 1000
-max_requests_jitter = 50
-timeout = 30
-keepalive = 2
 
 # Configuración de logging
 accesslog = "-"
