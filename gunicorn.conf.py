@@ -4,27 +4,41 @@ Configuración de Gunicorn para producción
 Optimizado para trabajar con Cloudflare y dominio you-space.info
 """
 
-import multiprocessing
 import os
+import multiprocessing
+
+# Server socket
+# Render provides the PORT environment variable.
+bind = f"0.0.0.0:{os.environ.get('PORT', '10000')}"
+
+# Worker processes
+# GUNICORN_WORKERS is set in render.yaml
+workers = int(os.environ.get('GUNICORN_WORKERS', multiprocessing.cpu_count() * 2 + 1))
+worker_class = 'sync'
+timeout = int(os.environ.get('GUNICORN_TIMEOUT', 120))
+
+# Logging
+accesslog = '-'
+errorlog = '-'
+loglevel = 'info'
+capture_output = True
+
+# Process naming
+proc_name = 'you-space-app'
+
+# Preload app for better performance
+preload_app = True
 
 # Configuración de Gunicorn para Render
-bind = "0.0.0.0:10000"
-workers = 2
-timeout = 120
+bind = "0.0.0.0:8000"
 keepalive = 2
 max_requests = 1000
 max_requests_jitter = 100
 
 # Configuración del servidor
-bind = "0.0.0.0:8000"
-workers = multiprocessing.cpu_count() * 2 + 1
-worker_class = "sync"
 worker_connections = 1000
 
 # Configuración de logging
-accesslog = "-"
-errorlog = "-"
-loglevel = "info"
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
 
 # Configuración de seguridad
@@ -43,9 +57,6 @@ secure_scheme_headers = {
     'X-FORWARDED-PROTO': 'https',
     'X-FORWARDED-SSL': 'on'
 }
-
-# Configuración de preload
-preload_app = True
 
 def when_ready(server):
     """Función que se ejecuta cuando el servidor está listo"""
