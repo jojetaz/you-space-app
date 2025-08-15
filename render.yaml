@@ -3,22 +3,34 @@ services:
     name: you-space-app
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt && python init_db.py
+    buildCommand: |
+      pip install -r requirements.txt
+      python init_db.py
     startCommand: gunicorn wsgi:app
     envVars:
       - key: PYTHON_VERSION
-        value: 3.9.18
+        value: 3.9.16
       - key: FLASK_ENV
         value: production
-      - key: FLASK_APP
-        value: app.py
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
         value: sqlite:///ia_tools.db
-      - key: GUNICORN_WORKERS
-        value: 2
-      - key: GUNICORN_TIMEOUT
-        value: 120
     healthCheckPath: /
-    autoDeploy: true 
+    autoDeploy: true
+    headers:
+      - path: /static/*
+        name: Cache-Control
+        value: public, max-age=31536000
+      - path: /*.css
+        name: Cache-Control
+        value: public, max-age=3600
+      - path: /*.js
+        name: Cache-Control
+        value: public, max-age=3600
+      - path: /*.jpg
+        name: Cache-Control
+        value: public, max-age=31536000
+      - path: /*.png
+        name: Cache-Control
+        value: public, max-age=31536000 

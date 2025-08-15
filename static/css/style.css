@@ -6,11 +6,12 @@
     --text-dark: #1a1a1a;
     --text-light: #ffffff;
     --background-color: #f5f7fa;
-    --card-bg: rgba(255, 255, 255, 0.7);
-    --hover-bg: rgba(255, 255, 255, 0.9);
-    --shadow-color: rgba(0, 0, 0, 0.1);
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --hover-bg: rgba(255, 255, 255, 1);
+    --shadow-color: rgba(0, 0, 0, 0.15);
     --gradient-start: #f5f7fa;
     --gradient-end: #e4e8eb;
+    --overlay-color: rgba(10, 20, 40, 0.6);
 }
 
 /* Estilos generales */
@@ -21,6 +22,8 @@ body {
     min-height: 100vh;
     position: relative;
     padding-bottom: 60px;
+    margin: 0;
+    line-height: 1.6;
 }
 
 /* Estilos de las tarjetas */
@@ -28,15 +31,16 @@ body {
     background: var(--card-bg);
     border: none;
     border-radius: 15px;
-    box-shadow: 0 8px 20px var(--shadow-color);
+    box-shadow: 0 8px 25px var(--shadow-color);
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    margin-bottom: 1.5rem;
 }
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 25px var(--shadow-color);
+    box-shadow: 0 15px 35px var(--shadow-color);
     background: var(--hover-bg);
 }
 
@@ -48,11 +52,13 @@ body {
     color: var(--text-dark);
     font-weight: 600;
     margin-bottom: 1rem;
+    font-size: 1.25rem;
 }
 
 .card-text {
     color: var(--text-dark);
-    opacity: 1;
+    opacity: 0.9;
+    line-height: 1.6;
 }
 
 .card-img-top {
@@ -65,14 +71,16 @@ body {
 .navbar {
     background: var(--primary-color) !important;
     backdrop-filter: blur(10px);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 0;
 }
 
 .navbar-brand {
     font-weight: 600;
     font-size: 1.5rem;
     color: var(--text-light) !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .navbar-brand i {
@@ -84,191 +92,200 @@ body {
     color: var(--text-light) !important;
     font-weight: 500;
     transition: all 0.3s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .nav-link:hover {
-    color: var(--text-light) !important;
-    transform: translateY(-2px);
-    opacity: 0.9;
+    color: rgba(255, 255, 255, 0.8) !important;
+    transform: translateY(-1px);
 }
 
-/* Estilos de los botones */
+.navbar-toggler {
+    border: none;
+    padding: 0.25rem 0.5rem;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+/* Estilos del footer */
+footer {
+    background: var(--primary-color) !important;
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos de los formularios */
+.form-control {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    background: #fff;
+    box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+    border-color: var(--primary-color);
+}
+
+.form-label {
+    color: var(--text-dark);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+/* Estilos de las alertas */
+.alert {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+/* Estilos de botones */
 .btn {
     border-radius: 8px;
-    padding: 10px 20px;
     font-weight: 500;
     transition: all 0.3s ease;
-    border: none;
+    padding: 0.5rem 1rem;
 }
 
 .btn-primary {
-    background: var(--primary-color);
-    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
-    color: var(--text-light);
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 .btn-primary:hover {
-    background: rgba(13, 110, 253, 1);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.4);
+    background-color: #357abd;
+    border-color: #357abd;
+    transform: translateY(-1px);
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #e0a800;
+    color: #000;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #c82333;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .card-img-top {
+        height: 150px;
+    }
+    
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .lead {
+        font-size: 1rem;
+    }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Estilos para títulos y textos en páginas */
+.display-4 {
     color: var(--text-light);
+    font-weight: 700;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 1rem;
 }
 
-.btn-success {
-    background: var(--success-color);
-    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+.lead {
     color: var(--text-light);
+    opacity: 0.95;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
 }
 
-.btn-success:hover {
-    background: rgba(25, 135, 84, 1);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(25, 135, 84, 0.4);
-    color: var(--text-light);
-}
-
-/* Estilos para modales */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1050;
-    display: none;
-    overflow-x: hidden;
-    overflow-y: auto;
-    outline: 0;
-}
-
-.modal.show {
-    display: block;
-}
-
-.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #000;
-    z-index: 1040;
-}
-
-.modal-backdrop.show {
-    opacity: 0.5;
-}
-
-.modal-dialog {
-    position: relative;
-    width: auto;
-    margin: 1.75rem auto;
-    pointer-events: none;
-    max-width: 800px;
-}
-
-.modal-dialog-centered {
-    display: flex;
-    align-items: center;
-    min-height: calc(100% - 1rem);
-}
-
-.modal-content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    pointer-events: auto;
-    background-color: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 0.3rem;
-    outline: 0;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-}
-
-.modal-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 1rem;
-    border-bottom: 1px solid #dee2e6;
-    border-top-left-radius: 0.3rem;
-    border-top-right-radius: 0.3rem;
-    background-color: #fff;
-}
-
+/* Estilos para el modal de nueva herramienta */
 .modal-body {
-    position: relative;
-    flex: 1 1 auto;
-    padding: 1rem;
-    background-color: #fff;
+    padding: 2rem;
 }
 
 .modal-footer {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0.75rem;
-    border-top: 1px solid #dee2e6;
-    border-bottom-right-radius: 0.3rem;
-    border-bottom-left-radius: 0.3rem;
-    background-color: #fff;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
 }
 
-/* Estilos para el formulario dentro del modal */
-.modal .form-control {
-    display: block;
-    width: 100%;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #212529;
-    background-color: #fff;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+.modal-content {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.modal .form-control:focus {
-    color: #212529;
-    background-color: #fff;
-    border-color: #80bdff;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.modal .form-label {
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #212529;
-}
-
-/* Asegurar que los botones sean interactivos */
-.modal .btn {
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    vertical-align: middle;
-    user-select: none;
-    border: 1px solid transparent;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    border-radius: 0.25rem;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-.modal .btn-primary {
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-.modal .btn-secondary {
-    color: #fff;
-    background-color: #6c757d;
-    border-color: #6c757d;
+.modal-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1.5rem 2rem;
 }
 
 /* Asegurar que el modal esté por encima de todo */
@@ -295,228 +312,247 @@ body.modal-open {
     padding-right: 0 !important;
 }
 
-/* Estilos del footer */
-footer {
-    background: var(--primary-color) !important;
-    backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-light);
-}
-
-/* Estilos de los formularios */
-.form-control {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    padding: 12px;
-    transition: all 0.3s ease;
-}
-
-.form-control:focus {
-    background: #fff;
-    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-}
-
-/* Estilos de las alertas */
-.alert {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Estilos responsivos */
-@media (max-width: 768px) {
-    .card-img-top {
-        height: 150px;
-    }
-    
-    .navbar-brand {
-        font-size: 1.2rem;
-    }
-}
-
-/* Animaciones */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.card {
-    animation: fadeIn 0.5s ease-out;
-}
-
-/* Estilos para títulos y textos en páginas */
-.display-4 {
-    color: var(--text-dark);
-    font-weight: 700;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.lead {
-    color: var(--text-dark);
-    opacity: 1;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-/* Estilos para el modal de nueva herramienta */
-.modal-body {
-    padding: 2rem;
-}
-
-.form-label {
-    color: var(--text-dark);
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-}
-
-.modal-footer {
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 1rem 2rem;
-}
-
-/* Formulario flotante */
+/* Estilos para formularios flotantes */
 .formulario-flotante {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
-  display: none;
-  overflow-y: auto;
-  padding: 20px;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    display: none;
+    overflow-y: auto;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
 }
 
 .formulario-contenido {
-  position: relative;
-  width: 400px;
-  margin: 40px auto;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 400px;
+    max-width: 90%;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-out;
 }
 
 .formulario-header {
-  padding: 15px 20px;
-  border-bottom: 1px solid #eee;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-  border-radius: 8px 8px 0 0;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border-radius: 12px 12px 0 0;
 }
 
-.formulario-header h5 {
-  margin: 0;
-  font-size: 1.2rem;
-  font-weight: 500;
+.formulario-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-dark);
 }
 
 .formulario-body {
-  padding: 20px;
-  background: white;
-}
-
-.formulario-body .form-control {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-bottom: 10px;
-}
-
-.formulario-body .form-control:focus {
-  border-color: #4a90e2;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
-}
-
-.formulario-body .form-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 500;
-  color: #333;
+    padding: 2rem;
+    background: white;
 }
 
 .formulario-footer {
-  padding: 15px 20px;
-  border-top: 1px solid #eee;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  background: white;
-  border-radius: 0 0 8px 8px;
-}
-
-@media (max-width: 600px) {
-  .formulario-contenido {
-    width: 90%;
-    max-width: 400px;
-    margin: 20px auto;
-  }
+    padding: 1.5rem 2rem;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    background: white;
+    border-radius: 0 0 12px 12px;
 }
 
 /* Contenedor de video */
 .video-container {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  z-index: 9999;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
 .video-contenido {
-  position: relative;
-  width: 90%;
-  max-width: 800px;
-  background: #000;
-  border-radius: 8px;
-  overflow: hidden;
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .video-header {
-  padding: 15px 20px;
-  background: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #eee;
+    padding: 1rem 1.5rem;
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
 }
 
 .video-header h5 {
-  margin: 0;
-  font-size: 1.2rem;
-  font-weight: 500;
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-dark);
 }
 
 .video-body {
-  background: #000;
-  padding: 0;
+    background: #000;
+    padding: 0;
 }
 
 .video-body .ratio {
-  margin: 0;
+    margin: 0;
 }
 
 .video-body iframe {
-  border: none;
-  width: 100%;
-  height: 100%;
+    border: none;
+    width: 100%;
+    height: 100%;
 }
 
+/* Mejoras para dispositivos móviles */
 @media (max-width: 600px) {
-  .formulario-contenido {
-    width: 320px;
-    min-width: unset;
-    max-width: 90%;
-  }
+    .formulario-contenido {
+        width: 95%;
+        margin: 10px auto;
+    }
+    
+    .formulario-header,
+    .formulario-body,
+    .formulario-footer {
+        padding: 1rem;
+    }
+    
+    .video-contenido {
+        width: 95%;
+        margin: 10px auto;
+    }
+    
+    .video-header {
+        padding: 0.75rem 1rem;
+    }
+}
+
+/* Estilos para mejorar la legibilidad del texto */
+.text-muted {
+    color: #6c757d !important;
+}
+
+.form-text {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Estilos para iconos */
+.bi {
+    margin-right: 0.5rem;
+}
+
+/* Estilos para grupos de botones */
+.btn-group .btn {
+    margin-right: 0.25rem;
+}
+
+.btn-group .btn:last-child {
+    margin-right: 0;
+}
+
+/* Estilos para mejorar la accesibilidad */
+.btn:focus,
+.form-control:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+}
+
+/* Estilos para mejorar el contraste */
+.card-title,
+.card-text,
+.form-label {
+    color: var(--text-dark) !important;
+}
+
+/* Estilos para el contenedor principal */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Estilos para el contenido principal */
+main {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Estilos para mejorar la experiencia de usuario */
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #6c757d;
+    transition: color 0.3s ease;
+}
+
+.btn-close:hover {
+    color: #dc3545;
+}
+
+/* Estilos para mejorar la navegación */
+.navbar-nav .nav-link {
+    padding: 0.5rem 1rem;
+    margin: 0 0.25rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Estilos para mejorar las tarjetas en hover */
+.card:hover .card-title {
+    color: var(--primary-color);
+}
+
+/* Estilos para mejorar los formularios */
+.form-control::placeholder {
+    color: #adb5bd;
+    opacity: 1;
+}
+
+/* Estilos para mejorar las alertas */
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.1);
+    border-left: 4px solid #28a745;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-left: 4px solid #dc3545;
+    color: #721c24;
+}
+
+.alert-warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-left: 4px solid #ffc107;
+    color: #856404;
+}
+
+.alert-info {
+    background-color: rgba(23, 162, 184, 0.1);
+    border-left: 4px solid #17a2b8;
+    color: #0c5460;
 } 

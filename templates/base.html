@@ -20,6 +20,8 @@
             color: #1a1a1a;
             background: url('{{ url_for('static', filename='background.jpg') }}') no-repeat center center fixed, linear-gradient(135deg, #f5f7fa, #e4e8eb);
             background-size: cover;
+            margin: 0;
+            line-height: 1.6;
         }
         body::before {
             content: '';
@@ -28,7 +30,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(10, 20, 40, 0.7);
+            background: rgba(10, 20, 40, 0.6);
             z-index: 0;
             pointer-events: none;
         }
